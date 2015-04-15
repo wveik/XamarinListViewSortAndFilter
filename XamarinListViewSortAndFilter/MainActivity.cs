@@ -20,6 +20,11 @@ namespace XamarinListViewSortAndFilter {
         private bool mIsAnimating;
         private FriendsAdapter mAdapter;
 
+        private TextView txtFistsName;
+        private TextView txtLastName;
+        private TextView txtAge;
+        private TextView txtGender;
+
         protected override void OnCreate(Bundle bundle) {
             base.OnCreate(bundle);
 
@@ -29,7 +34,24 @@ namespace XamarinListViewSortAndFilter {
             mSearch = FindViewById<EditText>(Resource.Id.etSearch);
             mContainer = FindViewById<LinearLayout>(Resource.Id.llContainer);
 
+            txtFistsName = FindViewById<TextView>(Resource.Id.txtFistsName);
+            txtLastName = FindViewById<TextView>(Resource.Id.txtLastName);
+            txtAge = FindViewById<TextView>(Resource.Id.txtAge);
+            txtGender = FindViewById<TextView>(Resource.Id.txtGender);
+
+            txtFistsName.Tag = false;
+            txtLastName.Tag = false;
+            txtAge.Tag = false;
+            txtGender.Tag = false;
+
+            txtFistsName.Click += txtFistsName_Click;
+            txtLastName.Click += txtLastName_Click;
+            txtAge.Click += txtAge_Click;
+            txtGender.Click += txtGender_Click;
+
             mSearch.Alpha = 0;
+            mContainer.BringToFront();
+
             mSearch.TextChanged += mSearch_TextChanged;
 
             mFriends = new List<Friend>();
@@ -42,6 +64,54 @@ namespace XamarinListViewSortAndFilter {
             mFriends.Add(new Friend { FirstName = "Sally", LastName = "Johnson", Age = "54", Gender = "Female" });
 
             mAdapter = new FriendsAdapter(this, Resource.Layout.row_friend, mFriends);
+            mListView.Adapter = mAdapter;
+        }
+
+        void txtGender_Click(object sender, EventArgs e) {
+            var list = mFriends.OrderBy(x => x.Gender).ToList();
+
+            if ((bool)txtGender.Tag)
+                list.Reverse();
+
+            txtGender.Tag = !(bool)txtGender.Tag;
+
+            mAdapter = new FriendsAdapter(this, Resource.Layout.row_friend, list);
+            mListView.Adapter = mAdapter;
+        }
+
+        void txtAge_Click(object sender, EventArgs e) {
+            var list = mFriends.OrderBy(x => x.Age).ToList();
+
+            if ((bool)txtAge.Tag)
+                list.Reverse();
+
+            txtAge.Tag = !(bool)txtAge.Tag;
+
+            mAdapter = new FriendsAdapter(this, Resource.Layout.row_friend, list);
+            mListView.Adapter = mAdapter;
+        }
+
+        void txtLastName_Click(object sender, EventArgs e) {
+            var list = mFriends.OrderBy(x => x.LastName).ToList();
+
+            if ((bool)txtLastName.Tag)
+                list.Reverse();
+
+            txtLastName.Tag = !(bool)txtLastName.Tag;
+
+            mAdapter = new FriendsAdapter(this, Resource.Layout.row_friend, list);
+            mListView.Adapter = mAdapter;
+        }
+
+        void txtFistsName_Click(object sender, EventArgs e) {
+            var list = mFriends.OrderBy(x => x.FirstName).ToList();
+
+            if ((bool)txtFistsName.Tag)
+                list.Reverse();
+
+            txtFistsName.Tag = !(bool)txtFistsName.Tag;
+
+            mAdapter = new FriendsAdapter(this, Resource.Layout.row_friend, list);
             mListView.Adapter = mAdapter;
         }
 
